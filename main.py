@@ -15,6 +15,7 @@ output_data  = "output.csv"
 # 0 - 9
 labels       = 10
 alpha        = .00003
+lambda_reg   = .3
 max_itters   = 1000
 
 def sigmoid(x):
@@ -26,7 +27,7 @@ output label
 
 Also creates graphs to ensure the cost is decrease over time
 '''
-def gradient_descent(X, y, alpha, max_itters):
+def gradient_descent(X, y, alpha, lambda_reg, max_itters):
     #Set up graph to see how gradient descent performed
     fig, axs = plt.subplots(5, 2)
     x_axis = list(range(0, max_itters))
@@ -42,11 +43,15 @@ def gradient_descent(X, y, alpha, max_itters):
             h = sigmoid(X @ temp_theta)
             y1 = (yi.T @ np.log(h))
             y2 = ((1-yi).T @ np.log(1-h) )
-            j = -(1/X.shape[0]) * (y1 + y2)
+            j_reg = ((lambda_reg/(2*X.shape[0])) * np.sum(temp_theta[2:]**2))
+            j = -(1/X.shape[0]) * (y1 + y2) + j_reg
             j_hist[i].append(j)
             hy = h - yi
             hyX = X.T @ hy
-            temp_theta = temp_theta - ((alpha/X.shape[0]) * hyX)
+            reg_theta = temp_theta
+            reg_theta[0] = 0
+            grad_reg = ((lambda_reg/X.shape[0]) * reg_theta)
+            temp_theta = (temp_theta - ((alpha/X.shape[0]) * hyX)) + grad_reg
             if k % 50 == 0:
                 print("Label : {} \t Itter : {} \t Cost : {}".format(i, k, j), end='\r')
         theta[i, :] = temp_theta.T
@@ -86,9 +91,10 @@ def main():
     x_one = np.ones((X.shape[0],1))
     X = np.hstack((x_one, X))
     
+    
     #Fit model
-    print("Gradient Descent with alpha = {} and {} itterations".format(alpha, max_itters))
-    theta = gradient_descent(X, y, alpha, max_itters)
+    print("Gradient Descent with alpha = {}, lambda = {} and {} itterations".format(alpha, lambda_reg, max_itters))
+    theta = gradient_descent(X, y, alpha, lambda_reg, max_itters)
     print(theta.shape)
 
     #TEST
