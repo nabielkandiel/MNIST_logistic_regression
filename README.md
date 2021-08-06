@@ -17,3 +17,5 @@ This Python script takes the training MNIST data set from Kaggle and performs Mu
 ## Performance
 * Baseline Logistic Regression
     * 89.657% accuracy 
+* Logistic Regression with Regularization
+   * 89.66% accuracy 
