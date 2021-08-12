@@ -6,6 +6,10 @@ import matplotlib.pyplot as plt
 Performs logisitc regression on the MNIST data set
 
 Save predictions to a csv to be submitted to Kaggle
+
+Data is not split up into train, cross validation, test since
+Kaggle provides data to test the model on and diagnostic.py
+takes care of CV to find optimal parameters.
 '''
 
 path_to_data = "../data/"
@@ -26,6 +30,7 @@ Performs gradient descent to find the best thetas for each
 output label
 
 Also creates graphs to ensure the cost is decrease over time
+'''
 '''
 def gradient_descent(X, y, alpha, lambda_reg, max_itters):
     #Set up graph to see how gradient descent performed
@@ -70,7 +75,7 @@ def gradient_descent(X, y, alpha, lambda_reg, max_itters):
     for i in range(len(j_hist)):
         print("Cost on itter {:4} : {:10}".format(i, j_hist[i][-1]))
     return theta
-
+'''
 '''
 Returns the index with the highest probabily, which is the predicted number
 '''
